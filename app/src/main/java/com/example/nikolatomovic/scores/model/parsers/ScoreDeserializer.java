@@ -19,10 +19,17 @@ public class ScoreDeserializer implements JsonDeserializer<Score> {
         if (json.isJsonObject()) {
             JsonObject jsonObject = json.getAsJsonObject();
             if (jsonObject.get("home_team").isJsonPrimitive() && jsonObject.get("guest_team").isJsonPrimitive()) {
-                return new Score(jsonObject.get("home_team").getAsInt(), jsonObject.get("guest_team").getAsInt());
-            }
-            return null;
-        }
-        return null;
+                int home;
+                int guest;
+                try {
+                    home = jsonObject.get("home_team").getAsInt();
+                    guest = jsonObject.get("guest_team").getAsInt();
+                } catch (NumberFormatException e) {
+                    home = 0;
+                    guest = 0;
+                }
+                return new Score(home, guest);
+            } else return null;
+        } else  return null;
     }
 }

@@ -1,15 +1,11 @@
 package com.example.nikolatomovic.scores.model;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * Created by nikolatomovic on 6/6/17.
  */
 
 public class Score {
-    @SerializedName("home_team")
     private Integer home;
-    @SerializedName("guest_team")
     private Integer guest;
 
     public Score(Integer home, Integer guest) {
