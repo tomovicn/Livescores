@@ -13,4 +13,10 @@ import retrofit2.http.Query;
 public interface MatchsServiceInterface {
     @POST("index.php/livescores.json?sport_id=1")
     Call<ScoresResponse> getScores(@Query("from_time") String fromTime, @Query("until_time") String untilTime);
+
+    @POST("index.php/livescores.json?sport_id=1&type=LIVE")
+    Call<ScoresResponse> getLiveScores();
+
+    //@POST("matchcasts.json?match_id={match_id}")
+
 }

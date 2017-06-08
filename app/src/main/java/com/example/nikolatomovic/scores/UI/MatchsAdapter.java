@@ -23,7 +23,20 @@ public class MatchsAdapter extends RecyclerView.Adapter<MatchsAdapter.ViewHolder
 
     private ArrayList<Match> mMatchs;
 
-    public MatchsAdapter(ArrayList<Match> matchs) { this.mMatchs = matchs; }
+    public MatchsAdapter(ArrayList<Match> matchs) {
+        mMatchs = new ArrayList<>();
+        for (Match match : matchs) {
+            mMatchs.add(new Match(match));
+        }
+    }
+
+    public void updateData(ArrayList<Match> matchs) {
+        mMatchs.clear();
+        for (Match match : matchs) {
+            mMatchs.add(new Match(match));
+        }
+        notifyDataSetChanged();
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

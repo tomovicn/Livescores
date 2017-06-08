@@ -96,8 +96,16 @@
             android:layout_weight="8"
             android:scrollbars="vertical"/>
 
-    </LinearLayout>
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:background="@color/colorPrimary"
+            app:itemTextColor="#ffffff"
+            app:menu="@menu/bottom_nav_items" />
 
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>

@@ -2,6 +2,8 @@ package com.example.nikolatomovic.scores.UI;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,9 +42,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private ArrayList<Match> matchs;
+    private ArrayList<Match> liveMatchs;
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView bottomNavigationView;
     private LinearLayoutManager mLinearLayoutManager;
     private MatchsAdapter mAdapter;
     private DatePickerDialog mDatePickerDialog;
@@ -61,6 +66,30 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_all_scores:
+                        mAdapter.updateData(matchs);
+                        break;
+                    case R.id.menu_livescores:
+                        loadLivescores();
+                        break;
+                    case R.id.menu_finished:
+                        ArrayList<Match> finished = new ArrayList<Match>();
+                        for (Match match : matchs) {
+                            if (match.getStatusCode() == 100) {
+                                finished.add(match);
+                            }
+                        }
+                        mAdapter.updateData(finished);
+                        break;
+                }
+                return true;
+            }
+        });
 
         setBusinessLogic();
         loadData();
@@ -110,9 +139,27 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             @Override
             public void onResponse(Call<ScoresResponse> call, Response<ScoresResponse> response) {
                 ScoresResponse scoresResponse = response.body();
-                matchs = new ArrayList<Match>(Arrays.asList(scoresResponse.getMatchs()));
+                matchs = new ArrayList<>(Arrays.asList(scoresResponse.getMatchs()));
                 mAdapter = new MatchsAdapter(matchs);
                 mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<ScoresResponse> call, Throwable t) {
+                Log.d("Error",t.getMessage());
+            }
+        });
+    }
+
+    private void loadLivescores() {
+        MatchsServiceInterface request = retrofit.create(MatchsServiceInterface.class);
+        Call<ScoresResponse> call = request.getLiveScores();
+        call.enqueue(new Callback<ScoresResponse>() {
+            @Override
+            public void onResponse(Call<ScoresResponse> call, Response<ScoresResponse> response) {
+                ScoresResponse scoresResponse = response.body();
+                liveMatchs = new ArrayList<Match>(Arrays.asList(scoresResponse.getMatchs()));
+                mAdapter.updateData(liveMatchs);
             }
 
             @Override
@@ -130,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         Long tsLong = cal.getTimeInMillis()/1000;
-        Log.d("From: ", tsLong.toString());
         return tsLong.toString();
     }
 
@@ -142,7 +188,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         Long tsLong = cal.getTimeInMillis()/1000;
-        Log.d("Until: ", tsLong.toString());
         return tsLong.toString();
     }
 

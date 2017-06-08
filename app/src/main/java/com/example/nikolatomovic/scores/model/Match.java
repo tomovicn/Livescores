@@ -36,6 +36,19 @@ public class Match {
     @SerializedName("goals")
     private Goals goals;
 
+    public Match(Match match) {
+        this.homeTeam = match.getHomeTeam();
+        this.guestTeam = match.getGuestTeam();
+        this.matchCurrentTime = match.getMatchCurrentTime();
+        this.tournamentName = match.getTournamentName();
+        this.categoryName = match.getCategoryName();
+        this.matchTime = match.getMatchTime();
+        this.status = match.getStatus();
+        this.statusCode = match.getStatusCode();
+        this.score = match.getScore();
+        this.goals = match.getGoals();
+    }
+
     public Team getHomeTeam() {
         return homeTeam;
     }
@@ -54,9 +67,13 @@ public class Match {
 
     public String getTournamentName() { return tournamentName; }
 
+    public String getMatchTime() { return matchTime; }
+
     public String getStatus() {
         return status;
     }
+
+    public Goals getGoals() { return goals; }
 
     public Integer getStatusCode() {
         return statusCode;
