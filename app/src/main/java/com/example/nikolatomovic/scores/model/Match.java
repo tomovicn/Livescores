@@ -49,6 +49,10 @@ public class Match {
         this.goals = match.getGoals();
     }
 
+    public String getId() {
+        return id;
+    }
+
     public Team getHomeTeam() {
         return homeTeam;
     }

@@ -1,5 +1,6 @@
 package com.example.nikolatomovic.scores.network.interfaces;
 
+import com.example.nikolatomovic.scores.model.MatchCastResponse;
 import com.example.nikolatomovic.scores.model.ScoresResponse;
 
 import retrofit2.Call;
@@ -17,6 +18,6 @@ public interface MatchsServiceInterface {
     @POST("index.php/livescores.json?sport_id=1&type=LIVE")
     Call<ScoresResponse> getLiveScores();
 
-    //@POST("matchcasts.json?match_id={match_id}")
-
+    @POST("matchcasts.json")
+    Call<MatchCastResponse> getMatchCast(@Query("match_id") String matchId);
 }

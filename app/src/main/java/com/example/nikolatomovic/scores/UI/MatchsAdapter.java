@@ -1,5 +1,7 @@
 package com.example.nikolatomovic.scores.UI;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,14 +53,21 @@ public class MatchsAdapter extends RecyclerView.Adapter<MatchsAdapter.ViewHolder
         @BindView(R.id.scores_guest_team)
         TextView mGuestTeam;
 
+        private static final String MATCH_ID_KEY = "MATCH_ID";
+        private String matchId;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-
+            Context context = itemView.getContext();
+            Intent showMatchCastIntent = new Intent(context, MatchCastActivity.class);
+            showMatchCastIntent.putExtra(MATCH_ID_KEY, matchId);
+            context.startActivity(showMatchCastIntent);
         }
     }
 
@@ -72,6 +81,7 @@ public class MatchsAdapter extends RecyclerView.Adapter<MatchsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(MatchsAdapter.ViewHolder holder, int position) {
         Match match = mMatchs.get(position);
+        holder.matchId = match.getId();
         holder.mLeague.setText(match.getTournamentName());
         holder.mHomeTeam.setText(match.getHomeTeam().getName());
         holder.mGuestTeam.setText(match.getGuestTeam().getName());
